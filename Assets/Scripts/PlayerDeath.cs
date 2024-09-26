@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerDeath : MonoBehaviour
 {
-    public string dangerTag = "Danger"; // La etiqueta del bloque peligroso
+    public string dangerTag = "DangerKill"; // La etiqueta del bloque peligroso (instakill)
 
     void OnCollisionEnter(Collision collision)
     {
