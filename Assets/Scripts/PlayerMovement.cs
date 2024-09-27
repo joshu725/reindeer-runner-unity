@@ -6,8 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;    // Velocidad de movimiento horizontal
     public float currentSpeed;
-    public float jumpForce = 10f;    // Fuerza del salto
-    public float gravityScale = 1.75f; // Factor de gravedad personalizado
+    public float jumpForce = 7f;    // Fuerza del salto
+    public float gravityScale = 1.85f; // Factor de gravedad personalizado
     public Transform cameraTransform; // Transform de la cámara
     public int maxJumps = 2; // Número máximo de saltos permitidos (doble salto)
     public float runMultiplier = 1.5f; // Multiplicador de velocidad al correr con Shift
@@ -18,10 +18,13 @@ public class PlayerMovement : MonoBehaviour
     private float moveInputX;
     private float moveInputZ;
 
+    public AudioSource jumpSound;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>(); // Obtener el componente Rigidbody
         rb.useGravity = false; // Desactiva la gravedad predeterminada de Unity para personalizarla
+        jumpSound = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -62,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             jumpCount++; // Incrementa el contador de saltos al saltar
             isGrounded = false; // Asegurarse de que no está en el suelo después de un salto
+            jumpSound.Play();
         }
 
         // Rotar el jugador solo si hay movimiento y está en el suelo
