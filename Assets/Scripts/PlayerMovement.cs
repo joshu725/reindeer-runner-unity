@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public float runMultiplier = 1.5f; // Multiplicador de velocidad al correr con Shift
 
     private Rigidbody rb;
-    public bool isGrounded = true; // Indica si el jugador está tocando el suelo
+    private bool isGrounded = true; // Indica si el jugador está tocando el suelo
     private int jumpCount = 0; // Contador de saltos realizados
     private float moveInputX;
     private float moveInputZ;
@@ -29,8 +29,8 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>(); // Obtener el componente Rigidbody
         rb.useGravity = false; // Desactiva la gravedad predeterminada de Unity para personalizarla
 
+        // Obtener sonidos
         audioSources = GetComponents<AudioSource>();
-        Debug.Log(audioSources);
         jumpSound = audioSources[0];
         walkSound = audioSources[1];
     }
@@ -41,11 +41,19 @@ public class PlayerMovement : MonoBehaviour
         moveInputX = Input.GetAxis("Horizontal");
         moveInputZ = Input.GetAxis("Vertical");
 
+        // Si no hay entrada de movimiento, salir de la función
+        if (moveInputX == 0 && moveInputZ == 0 && isGrounded)
+        {
+            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            return; // No hacer cálculos innecesarios si no hay entrada de movimiento
+        }
+
         // Verificar si está corriendo (Shift)
         currentSpeed = moveSpeed;
         if (Input.GetKey(KeyCode.LeftShift))
         {
             currentSpeed *= runMultiplier; // Aumentar velocidad al correr
+            // Al correr se escuchará mas rapido el sonido de caminar
             stepSoundDelay = 0.4f;
         }
         else
@@ -66,40 +74,54 @@ public class PlayerMovement : MonoBehaviour
         right.Normalize();
 
         // Calcular la dirección en la que el jugador debería moverse
-        Vector3 moveDirection = forward * moveInputZ + right * moveInputX;
+        Vector3 moveDirection = (forward * moveInputZ) + (right * moveInputX);
+        moveDirection.Normalize(); // Asegurarse de que no hay un exceso de velocidad en diagonal
+
+        // Aplicar el movimiento
         rb.velocity = new Vector3(moveDirection.x * currentSpeed, rb.velocity.y, moveDirection.z * currentSpeed);
 
         // Aplicar gravedad personalizada
         rb.AddForce(Physics.gravity * (gravityScale - 1) * rb.mass);
 
-        // Saltar
+        // Manejar el salto
+        HandleJump();
+
+        // Reproducir sonido de caminar si se cumple la condición
+        HandleWalkingSound(moveDirection);
+
+        // Rotar el jugador solo si hay movimiento y está en el suelo
+        if (moveDirection != Vector3.zero && isGrounded)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.15f); // Rotación suave
+        }
+    }
+
+    void HandleJump()
+    {
         if (Input.GetButtonDown("Jump") && (isGrounded || jumpCount < maxJumps))
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
-            jumpCount++; // Incrementa el contador de saltos al saltar
-            isGrounded = false; // Asegurarse de que no está en el suelo después de un salto
+            jumpCount++; // Incrementar contador de saltos al saltar
+            isGrounded = false; // Evitar múltiples saltos consecutivos
             jumpSound.Play();
         }
+    }
 
-        // Reproducir sonido de caminar solo si el personaje se está moviendo y está en el suelo
+    void HandleWalkingSound(Vector3 moveDirection)
+    {
+        // Solo reproducir el sonido si el personaje se está moviendo y está en el suelo
         if (moveDirection != Vector3.zero && isGrounded)
         {
             // Actualizar el temporizador
             stepSoundTimer -= Time.deltaTime;
 
             // Reproducir el sonido si ha pasado suficiente tiempo (delay)
-            if (stepSoundTimer <= 0f)
+            if (stepSoundTimer <= 0f && currentSpeed >= moveSpeed)
             {
-                if(currentSpeed >= moveSpeed)
-                {
-                    walkSound.Play();
-                    stepSoundTimer = stepSoundDelay; // Reiniciar el temporizador
-                }
+                walkSound.Play();
+                stepSoundTimer = stepSoundDelay; // Reiniciar el temporizador
             }
-
-            // Rotar el jugador solo si hay movimiento y está en el suelo
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.15f);
         }
         else
         {
