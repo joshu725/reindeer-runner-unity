@@ -18,13 +18,21 @@ public class PlayerMovement : MonoBehaviour
     private float moveInputX;
     private float moveInputZ;
 
+    private AudioSource[] audioSources;
+    public AudioSource walkSound;
     public AudioSource jumpSound;
+    float stepSoundTimer = 0f;
+    public float stepSoundDelay = 0.8f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>(); // Obtener el componente Rigidbody
         rb.useGravity = false; // Desactiva la gravedad predeterminada de Unity para personalizarla
-        jumpSound = GetComponent<AudioSource>();
+
+        audioSources = GetComponents<AudioSource>();
+        Debug.Log(audioSources);
+        jumpSound = audioSources[0];
+        walkSound = audioSources[1];
     }
 
     void Update()
@@ -38,6 +46,11 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             currentSpeed *= runMultiplier; // Aumentar velocidad al correr
+            stepSoundDelay = 0.4f;
+        }
+        else
+        {
+            stepSoundDelay = 0.8f;
         }
 
         // Direcciones de movimiento en base a la cámara
@@ -68,11 +81,30 @@ public class PlayerMovement : MonoBehaviour
             jumpSound.Play();
         }
 
-        // Rotar el jugador solo si hay movimiento y está en el suelo
+        // Reproducir sonido de caminar solo si el personaje se está moviendo y está en el suelo
         if (moveDirection != Vector3.zero && isGrounded)
         {
+            // Actualizar el temporizador
+            stepSoundTimer -= Time.deltaTime;
+
+            // Reproducir el sonido si ha pasado suficiente tiempo (delay)
+            if (stepSoundTimer <= 0f)
+            {
+                if(currentSpeed >= moveSpeed)
+                {
+                    walkSound.Play();
+                    stepSoundTimer = stepSoundDelay; // Reiniciar el temporizador
+                }
+            }
+
+            // Rotar el jugador solo si hay movimiento y está en el suelo
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.15f);
+        }
+        else
+        {
+            // Reiniciar el temporizador si el personaje deja de moverse
+            stepSoundTimer = 0f;
         }
     }
 
