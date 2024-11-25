@@ -24,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
     float stepSoundTimer = 0f;
     public float stepSoundDelay = 0.8f;
 
+    private Animator animator;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>(); // Obtener el componente Rigidbody
@@ -33,6 +35,10 @@ public class PlayerMovement : MonoBehaviour
         audioSources = GetComponents<AudioSource>();
         jumpSound = audioSources[0];
         walkSound = audioSources[1];
+
+        // Obtener el Animator
+        animator = GetComponent<Animator>();
+
     }
 
     void Update()
@@ -95,6 +101,8 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.15f); // Rotación suave
         }
+
+        animator.SetFloat("Speed", moveDirection.magnitude * currentSpeed); // Se actualiza el parametro de "Speed" en el Animator
     }
 
     void HandleJump()
