@@ -51,7 +51,12 @@ public class PlayerMovement : MonoBehaviour
         if (moveInputX == 0 && moveInputZ == 0 && isGrounded)
         {
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            animator.SetBool("Moving", false);
             return; // No hacer cálculos innecesarios si no hay entrada de movimiento
+        }
+        else
+        {
+            animator.SetBool("Moving", true);
         }
 
         // Verificar si está corriendo (Shift)
@@ -101,8 +106,7 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.15f); // Rotación suave
         }
-
-        animator.SetFloat("Speed", moveDirection.magnitude * currentSpeed); // Se actualiza el parametro de "Speed" en el Animator
+        
     }
 
     void HandleJump()
