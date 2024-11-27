@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - Danger
   - DangerKill
+  - Platform
   layers:
   - Default
   - TransparentFX

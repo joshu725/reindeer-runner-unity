@@ -147,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
     // Detectar colisión con el suelo
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Nature"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Nature") || collision.gameObject.CompareTag("Platform"))
         {
             isGrounded = true;
             jumpCount = 0; // Restablecer el contador de saltos al tocar el suelo
