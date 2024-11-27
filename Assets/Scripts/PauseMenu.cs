@@ -39,7 +39,7 @@ public class PauseMenu : MonoBehaviour
     public void RestartGame()
     {
         Time.timeScale = 1f;  // Asegura que el tiempo regrese a la normalidad antes de reiniciar
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("Initial Zone");
     }
 
     public void QuitMenu()

@@ -6,8 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;    // Velocidad de movimiento horizontal
     public float currentSpeed;
-    public float jumpForce = 7f;    // Fuerza del salto
-    public float gravityScale = 1.85f; // Factor de gravedad personalizado
+    public float jumpForce = 5f;    // Fuerza del salto
+    public float gravityScale = 1.5f; // Factor de gravedad personalizado
     public Transform cameraTransform; // Transform de la cámara
     public int maxJumps = 2; // Número máximo de saltos permitidos (doble salto)
     public float runMultiplier = 1.5f; // Multiplicador de velocidad al correr con Shift
@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         moveInputZ = Input.GetAxis("Vertical");
 
         // Si no hay entrada de movimiento, salir de la función
-        if (moveInputX == 0 && moveInputZ == 0 && isGrounded)
+        if (moveInputX == 0 && moveInputZ == 0)
         {
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
             animator.SetBool("Moving", false);
@@ -96,19 +96,19 @@ public class PlayerMovement : MonoBehaviour
         // Aplicar gravedad personalizada
         rb.AddForce(Physics.gravity * (gravityScale - 1) * rb.mass);
 
+        // Rotar el jugador solo si hay movimiento y está en el suelo
+        if (moveDirection.magnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.15f); // Rotación suave
+        }
+
         // Manejar el salto
         HandleJump();
 
         // Reproducir sonido de caminar si se cumple la condición
         HandleWalkingSound(moveDirection);
 
-        // Rotar el jugador solo si hay movimiento y está en el suelo
-        if (moveDirection != Vector3.zero && isGrounded)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.15f); // Rotación suave
-        }
-        
     }
 
     void HandleJump()
