@@ -66,10 +66,12 @@ public class PlayerMovement : MonoBehaviour
             currentSpeed *= runMultiplier; // Aumentar velocidad al correr
             // Al correr se escuchará mas rapido el sonido de caminar
             stepSoundDelay = 0.4f;
+            animator.SetBool("Running", true);
         }
         else
         {
             stepSoundDelay = 0.8f;
+            animator.SetBool("Running", false);
         }
 
         // Direcciones de movimiento en base a la cámara
