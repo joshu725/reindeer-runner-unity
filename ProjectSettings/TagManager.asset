@@ -9,6 +9,8 @@ TagManager:
   - Danger
   - DangerKill
   - Platform
+  - Platform-Easy
+  - Platform-Hard
   layers:
   - Default
   - TransparentFX

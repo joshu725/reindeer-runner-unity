@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Death.unity
     guid: 0eb910ce864a5c5409fcfa107c118ef4
+  - enabled: 1
+    path: Assets/Scenes/Easy Zone.unity
+    guid: 7b302c6f09ca5704bb9a1f23ab6b8ece
   m_configObjects: {}
