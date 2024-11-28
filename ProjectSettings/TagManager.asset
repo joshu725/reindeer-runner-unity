@@ -11,6 +11,8 @@ TagManager:
   - Platform
   - Platform-Easy
   - Platform-Hard
+  - Obstacle
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
