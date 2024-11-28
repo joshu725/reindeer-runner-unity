@@ -12,6 +12,9 @@ public class Checkpoints : MonoBehaviour
     [SerializeField] Vector3 vectorPoint;
     [SerializeField] float dead;
 
+    public AudioSource source;
+    public float sound_volume = 1f;
+
     void Update()
     {
         // Se comprueba la altura del jugador, para cuando se caiga
@@ -26,6 +29,7 @@ public class Checkpoints : MonoBehaviour
         // Verifica si la colisión es con un objeto etiquetado como "Danger"
         if (collision.gameObject.CompareTag("DangerKill"))
         {
+            source.Play();
             // Se manda la jugador al ultimo checkpoint
             player.transform.position = vectorPoint;
         }

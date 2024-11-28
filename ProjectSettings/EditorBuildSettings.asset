@@ -12,9 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Initial Zone.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Death.unity
-    guid: 0eb910ce864a5c5409fcfa107c118ef4
-  - enabled: 1
     path: Assets/Scenes/Easy Zone.unity
     guid: 7b302c6f09ca5704bb9a1f23ab6b8ece
+  - enabled: 1
+    path: Assets/Scenes/Hard Zone.unity
+    guid: 4f4d58ae79366d5458a6e003b331611a
   m_configObjects: {}
