@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Checkpoints : MonoBehaviour
 {
@@ -33,7 +34,15 @@ public class Checkpoints : MonoBehaviour
     // Se elimina el objeto del checkpoint
     private void OnTriggerEnter(Collider other)
     {
-        vectorPoint = player.transform.position;
-        Destroy(other.gameObject);
+        if (other.CompareTag("Checkpoint"))
+        {
+            vectorPoint = player.transform.position;
+            Destroy(other.gameObject);
+        }
+
+        if (other.CompareTag("Goal"))
+        {
+            SceneManager.LoadScene("Initial Zone");
+        }
     }
 }

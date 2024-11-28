@@ -13,6 +13,7 @@ TagManager:
   - Platform-Hard
   - Obstacle
   - Checkpoint
+  - Goal
   layers:
   - Default
   - TransparentFX
