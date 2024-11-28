@@ -7,7 +7,6 @@ public class EnemyMoveCol : MonoBehaviour
     public float speed = 3f;               // Velocidad de movimiento del enemigo
     public float detectionDistance = 1.5f; // Distancia para detectar una pared
     public LayerMask wallLayer;            // Capa que define qué objetos son considerados "pared"
-
     private Vector3 moveDirection;
 
     void Start()

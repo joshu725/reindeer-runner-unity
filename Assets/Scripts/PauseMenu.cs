@@ -39,7 +39,8 @@ public class PauseMenu : MonoBehaviour
     public void RestartGame()
     {
         Time.timeScale = 1f;  // Asegura que el tiempo regrese a la normalidad antes de reiniciar
-        SceneManager.LoadScene("Initial Zone");
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
     }
 
     public void QuitMenu()
@@ -48,6 +49,11 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("Menu");
     }
 
+    public void Return()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Initial Zone");
+    }
 
     public void QuitGame()
     {
